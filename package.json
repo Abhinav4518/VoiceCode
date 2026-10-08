@@ -1,0 +1,60 @@
+{
+  "name": "voicecode",
+  "displayName": "VoiceCode",
+  "description": "A Voice-Driven Autonomous AI Coding Environment",
+  "version": "0.2.0",
+  "publisher": "voicecode",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "voicecode.start", "title": "VoiceCode: Start (open assistant panel)" },
+      { "command": "voicecode.listen", "title": "VoiceCode: Listen (start/stop recording)" },
+      { "command": "voicecode.ask", "title": "VoiceCode: Type a Command" },
+      { "command": "voicecode.rollback", "title": "VoiceCode: Roll Back Last Task" },
+      { "command": "voicecode.setApiKey", "title": "VoiceCode: Set Gemini API Key" },
+      { "command": "voicecode.showStats", "title": "VoiceCode: Show Evaluation Stats" }
+    ],
+    "keybindings": [
+      { "command": "voicecode.listen", "key": "ctrl+alt+v", "mac": "cmd+alt+v" }
+    ],
+    "configuration": {
+      "title": "VoiceCode",
+      "properties": {
+        "voicecode.llmProvider": {
+          "type": "string", "enum": ["auto", "gemini", "local"], "default": "auto",
+          "description": "auto = Gemini first, fall back to the local Ollama model if it fails."
+        },
+        "voicecode.geminiModel": { "type": "string", "default": "gemini-3.6-flash" },
+        "voicecode.ollamaUrl": { "type": "string", "default": "http://localhost:11434" },
+        "voicecode.ollamaModel": { "type": "string", "default": "llama3" },
+        "voicecode.whisperCommand": { "type": "string", "default": "whisper", "description": "Whisper CLI command (e.g. 'whisper' or 'python -m whisper')." },
+        "voicecode.whisperModel": { "type": "string", "default": "base.en" },
+        "voicecode.ffmpegPath": { "type": "string", "default": "ffmpeg" },
+        "voicecode.audioInputDevice": { "type": "string", "default": "", "description": "Microphone. Windows: device name (auto-detected if empty). macOS: avfoundation audio index (default 0). Linux: PulseAudio source (default 'default')." },
+        "voicecode.maxRecordSeconds": { "type": "number", "default": 15, "minimum": 3, "maximum": 60 },
+        "voicecode.autoApproveEdits": { "type": "boolean", "default": false, "description": "Apply file edits without asking. Commands are still risk-checked." },
+        "voicecode.maxRepairIterations": { "type": "number", "default": 5, "minimum": 1, "maximum": 10 },
+        "voicecode.testCommand": { "type": "string", "default": "", "description": "Override the auto-detected test/verify command." }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "npm run compile && node --test \"out/test/**/*.test.js\""
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/sql.js": "^1.4.9",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@google/genai": "^2.21.0",
+    "sql.js": "^1.10.3"
+  }
+}
